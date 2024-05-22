@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+  url= "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+ }
+model User {
+id String @id @default(uuid())
+firstName String 
+lastName String
+phoneNumber String @unique
+location String?
+city String?
+tower String?
+paymentDetails String?
+gender String
+dateOfBirth String
+lastSignin DateTime?
+password String
+email String? @unique
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+orders Order[]
+review Review[]
+comments CommentUser[]
+}
+model Admin {
+id String @id @default(uuid())
+lastSignin DateTime?
+password String
+email String? @unique
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  title String 
+  products ProductCategory[]
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  categories ProductCategory[]
+  price Int
+  size String
+  description String
+  description2 String
+  keyWord String
+  keyWord2 String
+  images String
+  reviews  Review[]
+  comments CommentUser[]
+  Purchases OrderItem[]
+
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+  productID Int
+  userID String
+  product Product @relation(fields: [productID], references: [id])
+  custoumer User @relation(fields: [userID], references: [id])
+  careatedAt DateTime @default(now())
+}
+
+// for break relation between product & Category
+model ProductCategory {
+  product Product @relation(fields: [productId], references: [id])
+  categoryId Int
+  productId Int
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@id([productId, categoryId])
+}
+
+model Comment{
+  id Int @id @default(autoincrement())
+  customer String
+  comment CommentUser[]
+  content String
+}
+model CommentUser{
+  customerId String
+  commentId Int
+  productId Int
+  comment Comment @relation(fields: [commentId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+  customer User @relation(fields: [customerId], references: [id])
+
+  @@id([commentId, productId, customerId])
+}
+model Order {
+  id String @id @default(uuid())
+  userID String
+  customer User @relation(fields: [userID], references: [id])
+  orderItems OrderItem[]
+  shipment Shipment[]
+  orderDate DateTime @default(now())
+}
+
+model OrderItem{
+  orderId String
+  productId Int
+  price Int
+  quentity Int
+  order Order @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+  @@id([orderId, productId])
+}
+
+model Shipment {
+  id String @id @default(uuid())
+  order Order @relation(fields: [orderID], references: [id])
+  orderID String @unique
+  shipmentDate DateTime @default(now())
+}
+
