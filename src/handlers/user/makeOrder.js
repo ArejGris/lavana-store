@@ -1,8 +1,9 @@
 const { PrismaClient } = require("@prisma/client");
 const shipment = require("../../stripe");
+const registerOrder=require("../user/registerOrder")
 const prisma = new PrismaClient();
 const makeOrder = async (req, reply) => {
-  const { userID, orderItems } = req.body;
+  const { userId, orderItems } = req.body;
   console.log(orderItems)
   let compareprice = true;
   let order
@@ -17,7 +18,7 @@ const makeOrder = async (req, reply) => {
     reply.send({ status: 401, message: "prices dont match the stored prices" });
   }
   if (compareprice) {
-    const items = orderItems.map(async(item) => {
+   /*  const items = orderItems.map(async(item) => {
       const product =await prisma.product.findUnique({where:{ id: item.productId }});
       return {
         name: product.keyWord,
@@ -25,13 +26,36 @@ const makeOrder = async (req, reply) => {
         quentity:item.quentity,
       };
     });
-    const ship = await shipment(items);
-   
-    if (ship.status !== 200) {
-      reply.send({ status: 500, message: "internal server error" });
-    } else {
-      reply.send({url:ship.url})
-    }
+    //const ship = await shipment(items);
+   await registerOrder(userID,orderItems)
+ */
+
+   try {
+    const order = await prisma.order.create({
+      data: {
+        userID:userId,
+        orderDate: new Date(),
+      },
+    });
+    orderItems.forEach(async(item) => {
+     await prisma.orderItem.create({
+        data: {
+          orderId: order.id,
+          productId: item.productId,
+          price: Number(item.price),
+          quentity: item.quentity,
+        },
+      });
+    });
+   await prisma.shipment.create({
+      data: { orderID: order.id, shipmentDate: new Date() },
+    });
+    reply.status(200).send({message:"successfully registered the order",order})
+  } catch (error) {
+    console.log(error)
+    reply.status(500).send({message:"internal server error"})
+  }
+ 
 
   }
 };
