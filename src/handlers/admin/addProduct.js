@@ -30,7 +30,7 @@ const addProduct= async ( req, reply) => {
      data:{ price,
       size,
       description,
-      description2:"",
+      description2:" ",
       keyWord,
       keyWord2:"",
       images:imgStr}
