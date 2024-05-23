@@ -14,22 +14,21 @@ const signhandler = async (fastify, req, reply) => {
     password,
     email,
   } = req.body;
+  try {
   let user
- try {
+
    user = await prisma.user.findUnique({
     where: {
       email: email,
     },
   });
- } catch (error) {
- return reply.send({status:400,message:"bad request"})
- }
+
 
   if (user) {
     reply.send({ message: "already found the email" });
     return;
   }
- try {
+
   const myuser = await prisma.user.create({
     data: {
       firstName:firstname,

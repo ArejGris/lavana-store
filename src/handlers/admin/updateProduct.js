@@ -20,6 +20,9 @@ reply.send({message:"no data for update"})
  });
     try {
         const product=await prisma.product.findUnique({where:{id:Number(id)}})
+        if(!product){
+          return  reply.send({status:404,message:"no product found"})
+        }
       const updatedproduct = await prisma.product.update({
         where: { id: Number(id) },
         data: {

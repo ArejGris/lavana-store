@@ -7,7 +7,7 @@ const productSchema = {
     size: { type: "string" },
     description: { type: "string" },
     keyWord: { type: "string" },
-    image1: { type: "array" }
+    images: { type: "array" }
   },
   required:['price']
 }

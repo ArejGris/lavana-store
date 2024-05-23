@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 const addProduct= async ( req, reply) => {
-  const res = req.body;
+ 
   const {
     categories,
     price,
@@ -10,7 +10,7 @@ const addProduct= async ( req, reply) => {
     description,
     keyWord,
     images
-  }=res.body
+  }=req.body
  console.log( categories,
   price,
   size,
@@ -30,7 +30,9 @@ const addProduct= async ( req, reply) => {
      data:{ price,
       size,
       description,
+      description2:"",
       keyWord,
+      keyWord2:"",
       images:imgStr}
     });
     if(categories.length>0){
