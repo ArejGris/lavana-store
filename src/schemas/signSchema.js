@@ -10,7 +10,7 @@ const signSchema = {
         tower: { type: 'string' },
         paymentDetails: { type: 'string' },
         gender: { type: 'string' },
-        dateOfBirth: { type: 'string' },
+        dateOfBirth: { type: 'date' },
         password: { type: 'string' },
         email: { type: 'string' },
       },

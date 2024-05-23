@@ -13,11 +13,11 @@ const commentProduct = async ( req, reply) => {
         customer: userId,
         content: comment,
       });
-      await prisma.commentUser.create({
+      await prisma.commentUser.create({data:{
         customerId: userId,
         commentId: thecomment.id,
         productId: id,
-      });
+      }});
     }
     reply.send({ status: 200, message: "your comment added successfully" });
   } catch (error) {

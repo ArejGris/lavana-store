@@ -14,11 +14,17 @@ const signhandler = async (fastify, req, reply) => {
     password,
     email,
   } = req.body;
-  const user = await prisma.user.findUnique({
+  let user
+ try {
+   user = await prisma.user.findUnique({
     where: {
       email: email,
     },
   });
+ } catch (error) {
+ return reply.send({status:400,message:"bad request"})
+ }
+
   if (user) {
     reply.send({ message: "already found the email" });
     return;
@@ -38,7 +44,10 @@ const signhandler = async (fastify, req, reply) => {
       email,
     },
   });
-
+ if(!myuser){
+  reply.send({status:500,message:"internal server error"})
+  return;
+ }
   console.log(myuser);
   const token = fastify.jwt.sign({ userId: email });
   if(token){
@@ -50,7 +59,7 @@ const signhandler = async (fastify, req, reply) => {
 
  } catch (error) {
   console.log(error)
-  reply.send({status:403,message:"internal server error"})
+  reply.send({status:500,message:"internal server error"})
  }
 
 };

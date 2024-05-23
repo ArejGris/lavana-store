@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 const addProduct= async ( req, reply) => {
+  const res = req.body;
   const {
     categories,
     price,
@@ -9,7 +10,13 @@ const addProduct= async ( req, reply) => {
     description,
     keyWord,
     images
-  } = req.body;
+  }=res.body
+ console.log( categories,
+  price,
+  size,
+  description,
+  keyWord,
+  images)
   if (!price || !keyWord || !description||!size) {
     reply.send({ message: "must be complete information" });
     return;

@@ -68,9 +68,9 @@ fastify1.get('/users',async(req,reply)=>{
    reply.send(users)
 }) */
 
-/*  fastify1.register(require("@fastify/cors"),{
-    origin:'http://localhost:3000'
-})  */
+ fastify1.register(require("@fastify/cors"),{
+    origin:'*'
+})  
 // another methods for route
 /* fastify1.route({
     method:"POST",

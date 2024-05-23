@@ -5,10 +5,11 @@ const getCategorys = async ( req, reply) => {
   
     try {
       const categorys=  await prisma.category.findMany({})
+      console.log(categorys)
       if(!categorys){
         reply.status(404).send({message:" no categories found"})
       }
-      reply.status(200).send({categorys})
+      reply.send({status:200,categorys})
     } catch (error) {
         reply.status(500).send({message:"internal server error"})
    

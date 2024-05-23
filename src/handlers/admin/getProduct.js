@@ -11,7 +11,7 @@ const getProduct = async ( req, reply) => {
       const images=product.images.split(" ")
 
       const product2={...product,images}
-      reply.status(200).send({product2})
+      reply.status(200).send({poroduct:product2})
     } catch (error) {
         reply.status(500).send({message:"internal server error"})
    

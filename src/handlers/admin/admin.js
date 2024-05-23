@@ -13,7 +13,6 @@ const getAdminHandler = async (fastify, req, reply) => {
     console.log(user)
     if (admin.password === password) {
       token = fastify.jwt.sign({ userId: email });
-
       console.log(token);
       reply.send({ token: token });
       return;
