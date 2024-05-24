@@ -29,7 +29,9 @@ reply.send({message:"no data for update"})
             price:Number(price),
             size:size,
             descrition:descrition,
+            description2:"",
             keyWord:keyWord,
+            keyWord2:"",
             images:imgStr},
       });
       reply

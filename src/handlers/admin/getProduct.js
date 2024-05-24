@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-
+const axios=require('axios')
 const prisma = new PrismaClient();
 const getProduct = async ( req, reply) => {
     const { id } = req.params;
@@ -9,9 +9,9 @@ const getProduct = async ( req, reply) => {
         reply.status(404).send({message:"product not found"})
       }
       const images=product.images.split(" ")
-
+      
       const product2={...product,images}
-      reply.status(200).send({poroduct:product2})
+      reply.status(200).send({product:product2})
     } catch (error) {
         reply.status(500).send({message:"internal server error"})
    
