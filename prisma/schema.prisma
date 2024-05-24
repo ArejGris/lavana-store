@@ -8,11 +8,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "postgresql"
-  url= "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
- }
+  url      = "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+}
+
 model User {
 id String @id @default(uuid())
 firstName String 
@@ -57,7 +57,7 @@ model Product {
   description2 String
   keyWord String
   keyWord2 String
-  images String
+  images String[]
   reviews  Review[]
   comments CommentUser[]
   Purchases OrderItem[]

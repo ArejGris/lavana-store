@@ -21,10 +21,7 @@ const addProduct= async ( req, reply) => {
     reply.send({ message: "must be complete information" });
     return;
   }
- let imgStr=''
- images.forEach(img=>{
-  imgStr+=img+" "
- })
+
   try {
     const product=await prisma.product.create({
      data:{ price,
@@ -33,9 +30,10 @@ const addProduct= async ( req, reply) => {
       description2:" ",
       keyWord,
       keyWord2:"",
-      images:imgStr}
+      images}
     });
-    if(categories.length>0){
+    console.log(product)
+    if(categories.length>0&&product){
       categories.forEach(async(cat)=> {
      await prisma.productCategory.create({
       data:{ cartegoryId:cat,

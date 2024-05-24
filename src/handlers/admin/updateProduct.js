@@ -14,10 +14,7 @@ const updateProduct = async ( req, reply) => {
   if (!categories && !price && !size && !descrition&&!keyWord && !images){
 reply.send({message:"no data for update"})
     }
- let imgStr=''
- images.forEach(img => {
-  imgStr+=img+' '
- });
+
     try {
         const product=await prisma.product.findUnique({where:{id:Number(id)}})
         if(!product){
@@ -32,7 +29,7 @@ reply.send({message:"no data for update"})
             description2:"",
             keyWord:keyWord,
             keyWord2:"",
-            images:imgStr},
+            images},
       });
       reply
         .status(200)
