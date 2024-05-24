@@ -30,14 +30,16 @@ const addProduct= async ( req, reply) => {
       description2:" ",
       keyWord,
       keyWord2:"",
-      images}
+      images,
+   }
     });
     console.log(product)
+
     if(categories.length>0&&product){
+     const p= await prisma.product.findUnique({where:{id:product.id}})
       categories.forEach(async(cat)=> {
      await prisma.productCategory.create({
-      data:{ cartegoryId:cat,
-       productId:product.id}
+      data:{ category:{connect:{id:cat}},product:{connect:{id:p.id}}}
       })}
     );
   }

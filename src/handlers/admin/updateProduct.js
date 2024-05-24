@@ -20,6 +20,7 @@ reply.send({message:"no data for update"})
         if(!product){
           return  reply.send({status:404,message:"no product found"})
         }
+        await prisma.productCategory.deleteMany({where:{productId:Number(id)}})
       const updatedproduct = await prisma.product.update({
         where: { id: Number(id) },
         data: {
@@ -31,6 +32,12 @@ reply.send({message:"no data for update"})
             keyWord2:"",
             images},
       });
+     categories.forEach(async(cat) => {
+      await prisma.productCategory.create({data:{
+        productId:updateProduct.id,
+        categoryId:cat
+      }})
+     });
       reply
         .status(200)
         .send({ message: "succesfully update the product", updatedproduct });
