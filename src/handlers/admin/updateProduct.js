@@ -32,12 +32,11 @@ reply.send({message:"no data for update"})
             keyWord2:"",
             images},
       });
-     categories.forEach(async(cat) => {
-      await prisma.productCategory.create({data:{
-        productId:updateProduct.id,
-        categoryId:cat
-      }})
-     });
+      categories.forEach(async(cat)=> {
+        await prisma.productCategory.create({
+         data:{ category:{connect:{id:cat}},product:{connect:{id:p.id}}}
+         })}
+       );
       reply
         .status(200)
         .send({ message: "succesfully update the product", updatedproduct });

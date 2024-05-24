@@ -5,11 +5,8 @@ const getProducts = async ( req, reply) => {
   
     try {
       const products=  await prisma.product.findMany({})
-      const products2=products.map(product=>{
-        const images=product.images.split(" ")
-        return {...product,images}
-      })
-      reply.send({status:200,products:products2})
+      
+      reply.send({status:200,products:products})
     } catch (error) {
         reply.status(500).send({message:"internal server error"})
    

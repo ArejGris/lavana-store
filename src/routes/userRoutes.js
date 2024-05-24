@@ -28,7 +28,7 @@ const signRoute = (fastify, option, done) => {
   fastify.post('/user/register-order',registerOrder);
   fastify.post('/hooks',stripeNot)
   fastify.post('/user/view-product',viewProduct);
-  fastify.post('/user/comment-product',commentProduct);
+  fastify.post('/user/comment-product/:id',commentProduct);
   done();
 };
 module.exports = signRoute;

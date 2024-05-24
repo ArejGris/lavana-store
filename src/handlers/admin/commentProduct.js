@@ -9,14 +9,14 @@ const commentProduct = async ( req, reply) => {
       if(!product){
         reply.send({status:404,message:"product not found"})
       }else{
-      const thecomment=await prisma.comment.create({
-        customer:userId,
+      const thecomment=await prisma.comment.create({data:{
+        customer:"",
         content:comment
-      })
+      }})
       await prisma.commentUser.create({
-        data:{customerId:null,
-        commentId:thecomment.id,
-        productId:id}
+        data:{customer:null,
+        comment:{connect:{id:thecomment.id}},
+        product:{connect:{id:product.id}}}
       })}
       reply.send({status:200,message:"your comment added successfully"})
     } catch (error) {
