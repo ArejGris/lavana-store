@@ -10,6 +10,7 @@ const {cartegorySchema}=require("../schemas/category")
 const {productSchema}=require("../schemas/product");
 const getCategorys = require("../handlers/admin/getCategorys");
 const getCategory = require("../handlers/admin/getCategory");
+const adminlogin = require("../handlers/admin/login");
 
 const getAdminsOpts = {
     schema: getAdminsSchema,
@@ -26,6 +27,7 @@ const adminRoute=(fastify,option,done)=>{
       fastify.get('/admin/get-product/:id',getProduct);
       fastify.get('/admin/get-categorys',getCategorys);
       fastify.get('/admin/get-category/:id',getCategory);
+      fastify.post('/admin/sign-in',adminlogin)
       done()
 }
 module.exports=adminRoute
