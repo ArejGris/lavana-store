@@ -1,9 +1,7 @@
 const fastify1=require('fastify')({logger:true})
 
 // plug in
-fastify1.register(require('./gretting-controller'),{prefix:'/hello'})
 //fastify1.register(require('./stripeController'),{prefix:'/stripe'})
-fastify1.register(require('./user-controller'),{prefix:'/user3'})
 fastify1.register(require('./routes/adminRoutes'))
 fastify1.register(require('./routes/userRoutes'))
 fastify1.register(require('./auth'))

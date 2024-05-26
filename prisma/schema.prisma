@@ -18,9 +18,10 @@ id String @id @default(uuid())
 firstName String 
 lastName String
 phoneNumber String @unique
+confirmNumber Boolean
 location String?
 city String?
-tower String?
+towen String?
 paymentDetails String?
 gender String
 dateOfBirth String
@@ -35,9 +36,8 @@ comments CommentUser[]
 }
 model Admin {
 id String @id @default(uuid())
-lastSignin DateTime?
-password String
 email String? @unique
+role String 
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 }

@@ -8,7 +8,7 @@ const signhandler = async (fastify, req, reply) => {
     phoneNumber,
     location,
     city,
-    tower,
+    towen,
     gender,
     birthDate,
     password,
@@ -34,9 +34,10 @@ const signhandler = async (fastify, req, reply) => {
       firstName:firstname,
       lastName:lastname,
       phoneNumber,
+      confirmNumber:false,
       location,
       city,
-      tower,
+      towen,
       gender,
       dateOfBirth:birthDate,
       password,
@@ -48,10 +49,10 @@ const signhandler = async (fastify, req, reply) => {
   return;
  }
   console.log(myuser);
-  const token = fastify.jwt.sign({ userId: email });
+  const token = fastify.jwt.sign({ userId: myuser.id });
   if(token){
   console.log(token);
-  reply.send({ token: token,user:myuser});}
+  reply.send({ token: token,user:myuser,status:200});}
   else{
     reply.send({status:403,message:"not allowed"})
   }

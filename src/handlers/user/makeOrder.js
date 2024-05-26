@@ -1,6 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
 const shipment = require("../../stripe");
-const registerOrder=require("../user/registerOrder")
 const prisma = new PrismaClient();
 const makeOrder = async (req, reply) => {
   const { userId, orderItems } = req.body;
@@ -15,7 +14,7 @@ const makeOrder = async (req, reply) => {
     }
   });
   if (!compareprice) {
-    reply.send({ status: 401, message: "prices dont match the stored prices" });
+   return reply.send({ status: 401, message: "prices dont match the stored prices" });
   }
   if (compareprice) {
    /*  const items = orderItems.map(async(item) => {
@@ -29,7 +28,11 @@ const makeOrder = async (req, reply) => {
     //const ship = await shipment(items);
    await registerOrder(userID,orderItems)
  */
-
+const user=await prisma.user.findUnique({where:{id:userId}})
+if(!user||!user.confirmNumber){
+  
+ return reply.send({ status: 403, message: "your account is not confirmed" });
+}
    try {
     const order = await prisma.order.create({
       data: {

@@ -6,8 +6,8 @@ const makeOrder=require("../handlers/user/makeOrder");
 
 const { loginSchema } = require("../schemas/loginSchema");
 const { signSchema } = require("../schemas/signSchema");
-const registerOrder = require("../handlers/user/registerOrder");
 const stripeNot = require("../handlers/user/stripeNot");
+const confirmUser = require("../handlers/user/confirmUser");
 const signRoute = (fastify, option, done) => {
   fastify.post(
     "/sign",
@@ -25,9 +25,9 @@ const signRoute = (fastify, option, done) => {
   );
   
   fastify.post('/user/make-order',makeOrder);
-  fastify.post('/user/register-order',registerOrder);
   fastify.post('/hooks',stripeNot)
   fastify.post('/user/view-product',viewProduct);
+  fastify.put('/user/confirm',confirmUser);
   fastify.post('/user/comment-product/:id',commentProduct);
   done();
 };
