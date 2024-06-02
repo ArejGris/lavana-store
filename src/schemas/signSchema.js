@@ -14,7 +14,7 @@ const signSchema = {
         password: { type: 'string' },
         email: { type: 'string' },
       },
-      required:['firstname','lastname','phoneNumber','password','email']
+      required:['email']
   },
   response: {
     200: {

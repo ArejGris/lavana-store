@@ -9,25 +9,27 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+ //provider = "postgresql"
+ //url      = "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+provider="mysql"
+url="mysql://root:1234@localhost:3306/lavana3"
 }
 
 model User {
 id String @id @default(uuid())
 firstName String 
 lastName String
-phoneNumber String @unique
-confirmNumber Boolean
+phoneNumber String? @unique
+confirmNumber Boolean?
 location String?
 city String?
 towen String?
 paymentDetails String?
-gender String
-dateOfBirth String
+gender String?
+dateOfBirth String?
 lastSignin DateTime?
-password String
-email String? @unique
+password String?
+email String @unique
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 orders Order[]
@@ -45,6 +47,7 @@ updatedAt DateTime @updatedAt
 model Category {
   id Int @id @default(autoincrement())
   title String 
+  title2 String?
   products ProductCategory[]
 }
 
@@ -53,11 +56,11 @@ model Product {
   categories ProductCategory[]
   price Int
   size String
-  description String
-  description2 String
-  keyWord String
-  keyWord2 String
-  images String[]
+  description String?
+  description2 String?
+  keyWord String?
+  keyWord2 String?
+  images String?
   reviews  Review[]
   comments CommentUser[]
   Purchases OrderItem[]

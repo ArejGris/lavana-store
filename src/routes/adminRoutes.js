@@ -11,6 +11,10 @@ const {productSchema}=require("../schemas/product");
 const getCategorys = require("../handlers/admin/getCategorys");
 const getCategory = require("../handlers/admin/getCategory");
 const adminlogin = require("../handlers/admin/login");
+const commentProduct = require("../handlers/admin/commentProduct");
+const getReview = require("../handlers/admin/getReview");
+const token = require("../handlers/admin/token");
+const getOrderProducts = require("../handlers/admin/getOrderProducts");
 
 const getAdminsOpts = {
     schema: getAdminsSchema,
@@ -21,13 +25,19 @@ const adminRoute=(fastify,option,done)=>{
       fastify.post('/admin', getAdminsOpts.schema,getAdminsOpts.handler);
       fastify.post('/admin/add-category',addCartegory);
       fastify.post('/admin/add-product', productSchema,addProduct);
+      fastify.post('/admin/get-order-products',getOrderProducts);
+      fastify.post('/admin/comment-product',commentProduct);
       fastify.post('/admin/update-product/:id', productSchema,updateProduct);
       fastify.delete('/admin/add-product/:id', deleteProduct);
       fastify.get('/admin/get-products',getProducts);
       fastify.get('/admin/get-product/:id',getProduct);
       fastify.get('/admin/get-categorys',getCategorys);
       fastify.get('/admin/get-category/:id',getCategory);
-      fastify.post('/admin/sign-in',adminlogin)
+      fastify.get('/admin/get-review/:id',getReview)
+      fastify.post('/admin/sign-in',(req,reply)=>adminlogin(fastify,req,reply))
+      fastify.post("/admin/token", (req, reply) =>
+        token(fastify, req, reply)
+      );
       done()
 }
 module.exports=adminRoute

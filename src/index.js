@@ -33,14 +33,14 @@ fastify1.get('/protected', {
 }) */
 //database
 
-/* fastify1.register(require('@fastify/mysql'),{
+ fastify1.register(require('@fastify/mysql'),{
     host:'localhost',
     user:'root',
     port:3306,
     password1:'1234',
     database:'users',
     promise:true
-}) */
+}) 
 /* fastify1.register(require('fastify-supabase'),{
     supabaseKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJkcW1keGhvYmV4Zmd1bWF3aW5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTYzODYzNDUsImV4cCI6MjAzMTk2MjM0NX0.3XxfA80dr5zMEqJDKJEbNknBs9gNhGSEpxNgW4vbtFw',
     supabaseUrl:'https://bdqmdxhobexfgumawink.supabase.co'

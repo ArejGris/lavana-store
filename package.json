@@ -21,6 +21,7 @@
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
+    "fastify-cookie": "^5.7.0",
     "fastify-plugin": "^4.5.1",
     "fastify-stripe": "^2.4.1",
     "fastify-supabase": "^1.2.1",

@@ -2,7 +2,7 @@
 
 module.exports = fp(async function(fastify, opts) {
   fastify.register(require("@fastify/jwt"), {
-    secret: "supersecret"
+    secret: "secretkey"
   })
 
   fastify.decorate("authenticate", async function(request, reply) {

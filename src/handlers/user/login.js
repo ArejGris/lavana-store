@@ -12,10 +12,11 @@ const loginhandler = async (fastify, req, reply) => {
   if (user) {
     console.log(user)
     if (user.password === password) {
-      token = fastify.jwt.sign({ userId: email });
+     token = fastify.jwt.sign({ userId: user.id });
 
       console.log(token);
-      reply.send({ token: token ,user,status:200});
+      console.log(user,"user")
+      reply.send({user,token,status:200});
       return;
     } else {
       reply.send({ msg: "password not valid" });

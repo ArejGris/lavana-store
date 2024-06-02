@@ -2,6 +2,12 @@ const { PrismaClient } = require("@prisma/client");
 const shipment = require("../../stripe");
 const prisma = new PrismaClient();
 const makeOrder = async (req, reply) => {
+ try {
+  await req.jwtVerify()
+ } catch (err) {
+  console.log(err,"err")
+ return  reply.send({status:403,message:"not authorized"})
+ }
   const { userId, orderItems } = req.body;
   console.log(orderItems)
   let compareprice = true;
