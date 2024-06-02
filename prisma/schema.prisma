@@ -60,7 +60,7 @@ model Product {
   description2 String?
   keyWord String?
   keyWord2 String?
-  images String?
+  images String[]
   reviews  Review[]
   comments CommentUser[]
   Purchases OrderItem[]
