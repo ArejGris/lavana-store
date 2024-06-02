@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const signingoogle = async (req, reply) => {
+const signingoogle = async (fastify,req, reply) => {
   const {
     email,
     firstName,lastName
@@ -13,7 +13,9 @@ const signingoogle = async (req, reply) => {
     },
   });
   if (user) {
-    reply.send({ status:200,user,message: "already found the email" });
+    
+  const token=await fastify.jwt.sign({userId:user.id})
+    reply.send({ status:200,user,token,message: "already found the email" });
     return;
   }
 
@@ -27,8 +29,8 @@ const signingoogle = async (req, reply) => {
   return;
  }
   console.log(myuser);
-  
-  reply.send({user:myuser,status:200});
+  const token=await fastify.jwt.sign({userId:myuser.id})
+  reply.send({user:myuser,token,status:200});
  } catch (error) {
   console.log(error)
   reply.send({status:500,message:"internal server error"})

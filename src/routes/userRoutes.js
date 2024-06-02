@@ -21,7 +21,7 @@ const userRoute = (fastify, option, done) => {
       }
     }
   );
-  fastify.post('/user/signingoogle',signingoogle);
+  fastify.post('/user/signingoogle',(req,reply)=>signingoogle(fastify,req,reply));
   fastify.post("/user/login", loginSchema, (req, reply) =>
     loginhandler(fastify, req, reply)
   );
