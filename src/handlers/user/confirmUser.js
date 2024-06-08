@@ -1,9 +1,15 @@
 const { PrismaClient } = require("@prisma/client");
+const jwt = require("jsonwebtoken");
 
 const prisma = new PrismaClient();
 const confirmUser = async (req, reply) => {
-  const { userId, phone } = req.body;
+  const { phone } = req.body;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
+ 
   try {
+    const user2=jwt.decode(token)
+   const userId=user2.userId
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (user.email) {
       await prisma.user.update({

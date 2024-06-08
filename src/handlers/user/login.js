@@ -1,4 +1,7 @@
+
+const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
+const { generateAccessToken, generateRefreshToken } = require("../../auth2");
 
 const prisma = new PrismaClient();
 const loginhandler = async (fastify, req, reply) => {
@@ -8,21 +11,25 @@ const loginhandler = async (fastify, req, reply) => {
       email: email,
     },
   });
-  let token;
+  
   if (user) {
-    console.log(user)
+    console.log(user);
     if (user.password === password) {
-     token = fastify.jwt.sign({ userId: user.id });
-
-      console.log(token);
-      console.log(user,"user")
-      reply.send({user,token,status:200});
-      return;
+    const  token = generateAccessToken(user.id)
+  
+      const decode = jwt.decode(token);
+      const createdAt = new Date(decode.iat * 1000);
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { tokenDate: createdAt },
+      });
+     return reply.send({ user, token,  status: 200 });
+     
     } else {
-      reply.send({ msg: "password not valid" });
+      reply.send({status:500, msg: "password not valid" });
     }
   } else {
-    reply.send({ msg: "user not found please sign in first" });
+    reply.send({status:500, msg: "user not found please sign in first" });
   }
 };
 module.exports = loginhandler;

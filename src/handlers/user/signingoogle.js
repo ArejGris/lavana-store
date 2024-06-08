@@ -1,4 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
+const { generateAccessToken } = require("../../auth2");
+const jwt=require('jsonwebtoken')
 const prisma = new PrismaClient();
 const signingoogle = async (fastify,req, reply) => {
   const {
@@ -14,7 +16,10 @@ const signingoogle = async (fastify,req, reply) => {
   });
   if (user) {
     
-  const token=await fastify.jwt.sign({userId:user.id})
+  const token=generateAccessToken(user.id)
+  const decode = jwt.decode(token);
+  const date = new Date(decode.iat * 1000);
+  await prisma.user.update({where:{id:user.id},data:{tokenDate:date}})
     reply.send({ status:200,user,token,message: "already found the email" });
     return;
   }
@@ -30,7 +35,9 @@ const signingoogle = async (fastify,req, reply) => {
  }
   console.log(myuser);
   const token=await fastify.jwt.sign({userId:myuser.id})
-  reply.send({user:myuser,token,status:200});
+  await prisma.user.update({where:{id:myuser.id},data:{lastSignin:new Date()}})
+  const refreshToken=randtoken.uid(190)
+  reply.send({user:myuser,refreshToken,token,status:200});
  } catch (error) {
   console.log(error)
   reply.send({status:500,message:"internal server error"})

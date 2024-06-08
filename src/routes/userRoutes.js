@@ -9,6 +9,8 @@ const confirmUser = require("../handlers/user/confirmUser");
 const signingoogle = require("../handlers/user/signingoogle");
 const reviewProduct = require("../handlers/user/reviewProduct");
 const getComment = require("../handlers/user/getComment");
+const tokenreq = require("../handlers/user/token");
+const refreshtoken = require("../handlers/user/refreshtoken");
 const userRoute = (fastify, option, done) => {
   fastify.post(
     "/user/sign",
@@ -27,6 +29,8 @@ const userRoute = (fastify, option, done) => {
   );
  
   fastify.post('/user/make-order',makeOrder);
+  fastify.post('/user/token',(req,reply)=>tokenreq(fastify,req,reply));
+  fastify.post('/user/refresh-token',refreshtoken);
   fastify.post('/hooks',stripeNot)
   fastify.post('/user/view-product',reviewProduct);
   fastify.put('/user/confirm',confirmUser);

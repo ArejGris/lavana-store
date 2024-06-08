@@ -9,10 +9,10 @@ generator client {
 }
 
 datasource db {
-provider = "postgresql"
-url      = "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
-//provider="mysql"
-//url="mysql://root:1234@localhost:3306/lavana3"
+//provider = "postgresql"
+//url      = "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+provider="mysql"
+url="mysql://root:1234@localhost:3306/lavana3"
 }
 
 model User {
@@ -28,6 +28,7 @@ paymentDetails String?
 gender String?
 dateOfBirth String?
 lastSignin DateTime?
+tokenDate DateTime?
 password String?
 email String @unique
 createdAt DateTime @default(now())
@@ -35,6 +36,13 @@ updatedAt DateTime @updatedAt
 orders Order[]
 review Review[]
 comments CommentUser[]
+tokens Login[]
+}
+model Login{
+id Int @id @default(autoincrement())
+userID String
+token String?
+customer User @relation(fields: [userID], references: [id])
 }
 model Admin {
 id String @id @default(uuid())
@@ -60,7 +68,7 @@ model Product {
   description2 String?
   keyWord String?
   keyWord2 String?
-  images String[]
+  images String?
   reviews  Review[]
   comments CommentUser[]
   Purchases OrderItem[]

@@ -13,8 +13,9 @@ const getCategory = require("../handlers/admin/getCategory");
 const adminlogin = require("../handlers/admin/login");
 const commentProduct = require("../handlers/admin/commentProduct");
 const getReview = require("../handlers/admin/getReview");
-const token = require("../handlers/admin/token");
 const getOrderProducts = require("../handlers/admin/getOrderProducts");
+const tokenverify = require("../handlers/admin/token");
+const refreshtoken = require("../handlers/admin/refreshToken");
 
 const getAdminsOpts = {
     schema: getAdminsSchema,
@@ -35,8 +36,9 @@ const adminRoute=(fastify,option,done)=>{
       fastify.get('/admin/get-category/:id',getCategory);
       fastify.get('/admin/get-review/:id',getReview)
       fastify.post('/admin/sign-in',(req,reply)=>adminlogin(fastify,req,reply))
+      fastify.post('/admin/refresh-token',refreshtoken)
       fastify.post("/admin/token", (req, reply) =>
-        token(fastify, req, reply)
+        tokenverify(fastify, req, reply)
       );
       done()
 }

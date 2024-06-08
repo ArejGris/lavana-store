@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const { generateAdminToken} = require("../../auth2");
 const adminlogin = async(fastify,req,reply) => {
     const { email} = req.body;
     console.log(email)
@@ -8,7 +9,7 @@ const adminlogin = async(fastify,req,reply) => {
         console.log(admin2)  */
         const admin= await prisma.admin.findUnique({where:{email:email}})
         if(admin){
-      const  token = fastify.jwt.sign({ userId: admin.id});
+      const  token = generateAdminToken(admin.id)
 
       reply.send({admin,token,status:200})
         }else{

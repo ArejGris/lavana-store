@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
-
+const { generateAccessToken } = require("../../auth2");
+const jwt=require('jsonwebtoken')
 const prisma = new PrismaClient();
 const signhandler = async (fastify, req, reply) => {
   const {
@@ -15,52 +16,57 @@ const signhandler = async (fastify, req, reply) => {
     email,
   } = req.body;
   try {
-  let user
+    let user;
 
-   user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
+    user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
 
-
-  if (user) {
-    reply.send({ message: "already found the email" });
-    return;
+    if (user) {
+      reply.send({ message: "already found the email" });
+      return;
+    }
+    const checkphone = await prisma.user.findUnique({
+      where: { phoneNumber: phoneNumber },
+    });
+    if (checkphone) {
+      reply.send({ message: "phone number is already used", status: 400 });
+    } else {
+      const myuser = await prisma.user.create({
+        data: {
+          firstName: firstname,
+          lastName: lastname,
+          phoneNumber,
+          confirmNumber: false,
+          location,
+          city,
+          towen,
+          gender,
+          dateOfBirth: birthDate,
+          password,
+          email,
+        },
+      });
+      if (!myuser) {
+        reply.send({ status: 500, message: "user havent created" });
+        return;
+      } else {
+        
+     const token = generateAccessToken( myuser.id );
+     const decode = jwt.decode(token);
+     const date = new Date(decode.iat * 1000);
+     await prisma.user.update({
+       where: { id: myuser.id },
+       data: { tokenDate: date },
+     });
+        reply.send({ user: myuser,token, status: 200 });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    reply.send({ status: 500, message: "internal server error" });
   }
-
-  const myuser = await prisma.user.create({
-    data: {
-      firstName:firstname,
-      lastName:lastname,
-      phoneNumber,
-      confirmNumber:false,
-      location,
-      city,
-      towen,
-      gender,
-      dateOfBirth:birthDate,
-      password,
-      email,
-    },
-  });
- if(!myuser){
-  reply.send({status:500,message:"internal server error"})
-  return;
- }
-  console.log(myuser);
-  const token = fastify.jwt.sign({ userId: myuser.id });
-  if(token){
-  console.log(token);
-  reply.send({ token: token,user:myuser,status:200});}
-  else{
-    reply.send({status:403,message:"not allowed"})
-  }
-
- } catch (error) {
-  console.log(error)
-  reply.send({status:500,message:"internal server error"})
- }
-
 };
 module.exports = signhandler;

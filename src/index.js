@@ -1,3 +1,4 @@
+
 const fastify1=require('fastify')({logger:true})
 
 // plug in
@@ -81,6 +82,7 @@ fastify1.get('/users',async(req,reply)=>{
     }
 })
  */
+
 try {
     fastify1.listen({port:5000})
 } catch (error) {
