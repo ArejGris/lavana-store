@@ -11,6 +11,8 @@ const reviewProduct = require("../handlers/user/reviewProduct");
 const getComment = require("../handlers/user/getComment");
 const tokenreq = require("../handlers/user/token");
 const refreshtoken = require("../handlers/user/refreshtoken");
+const getUserOrder = require("../handlers/user/getUserOrders");
+const deleteOrder = require("../handlers/user/deleteOrder");
 const userRoute = (fastify, option, done) => {
   fastify.post(
     "/user/sign",
@@ -36,6 +38,8 @@ const userRoute = (fastify, option, done) => {
   fastify.put('/user/confirm',confirmUser);
   fastify.post('/user/comment-product/:id',commentProduct);
   fastify.get('/user/get-comments/:id',getComment);
+  fastify.get('/user/get-orders',getUserOrder);
+  fastify.delete('/user/delete-order/:id',deleteOrder);
   done();
 };
 module.exports = userRoute;

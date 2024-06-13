@@ -14,7 +14,17 @@ datasource db {
 provider="mysql"
 url="mysql://root:1234@localhost:3306/lavana3"
 }
-
+model Session {
+id String @id @default(uuid())
+userId String @unique
+tokenDate DateTime?
+}
+model Copon{
+id String @id @default(uuid())
+code String @unique
+discount Int?
+date DateTime?
+}
 model User {
 id String @id @default(uuid())
 firstName String 

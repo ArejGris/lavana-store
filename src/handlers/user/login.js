@@ -1,4 +1,3 @@
-
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
 const { generateAccessToken, generateRefreshToken } = require("../../auth2");
@@ -11,25 +10,43 @@ const loginhandler = async (fastify, req, reply) => {
       email: email,
     },
   });
-  
+
   if (user) {
     console.log(user);
     if (user.password === password) {
-    const  token = generateAccessToken(user.id)
-  
+      const token = generateAccessToken(user.id);
+
       const decode = jwt.decode(token);
       const createdAt = new Date(decode.iat * 1000);
       await prisma.user.update({
         where: { id: user.id },
         data: { tokenDate: createdAt },
       });
-     return reply.send({ user, token,  status: 200 });
-     
+      try {
+        const session = await prisma.session.findUnique({
+          where: { userId: user.id },
+        });
+        if (session) {
+          await prisma.session.update({
+            where: { userId: user.id },
+            data: { tokenDate: createdAt },
+          });
+        } else {
+          await prisma.session.create({
+            data: { userId: user.id, tokenDate: createdAt },
+          });
+        }
+        return reply.send({ user, token, status: 200 });
+      } catch (error) {
+        console.log(error);
+
+        reply.send({ status: 500, msg: "internal server error" });
+      }
     } else {
-      reply.send({status:500, msg: "password not valid" });
+      reply.send({ status: 500, msg: "password not valid" });
     }
   } else {
-    reply.send({status:500, msg: "user not found please sign in first" });
+    reply.send({ status: 500, msg: "user not found please sign in first" });
   }
 };
 module.exports = loginhandler;

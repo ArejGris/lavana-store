@@ -5,7 +5,6 @@ const fastify1=require('fastify')({logger:true})
 //fastify1.register(require('./stripeController'),{prefix:'/stripe'})
 fastify1.register(require('./routes/adminRoutes'))
 fastify1.register(require('./routes/userRoutes'))
-fastify1.register(require('./auth'))
 /* const rawBody=require('raw-body')
 fastify1.addContentTypeParser('application/json',{parseAs:'string'},(req,done)=>{
     rawBody(req,{length:req.headers['content-length'],limit:'1mb'},(err,body)=>{

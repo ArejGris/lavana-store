@@ -29,6 +29,17 @@ const signingoogle = async (fastify,req, reply) => {
       email,firstName,lastName
     },
   });
+const session= await prisma.session.findUnique({where:{userId:myuser.id}})
+if(session){
+  await prisma.session.update({
+    where:{userId:myuser.id},data:{ tokenDate: createdAt }
+   })
+  }else{
+    
+  await prisma.session.create({
+    data:{userId:myuser.id, tokenDate: createdAt }
+   })
+  }
  if(!myuser){
   reply.send({status:500,message:"user havent created"})
   return;

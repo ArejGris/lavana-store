@@ -24,12 +24,15 @@ const user=await prisma.user.findUnique({where:{id:user2.userId}})
 
       const refreshToken = generateRefreshToken(user.id);
       console.log(newtoken, refreshToken, "compare two token");
-      const decode = jwt.decode(token);
+      const decode = jwt.decode(newtoken);
       const date = new Date(decode.iat * 1000);
       await prisma.user.update({
         where: { id: user.id },
         data: { tokenDate: date },
       });
+      await prisma.session.update({where:{userId:user.id},data:{
+        tokenDate:date
+       }})
       console.log(refreshToken, token, user, "all data");
       reply.send({ status: 200, token: newtoken, refreshToken });
       

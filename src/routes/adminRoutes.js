@@ -16,6 +16,7 @@ const getReview = require("../handlers/admin/getReview");
 const getOrderProducts = require("../handlers/admin/getOrderProducts");
 const tokenverify = require("../handlers/admin/token");
 const refreshtoken = require("../handlers/admin/refreshToken");
+const AddCopon = require("../handlers/admin/addCopon");
 
 const getAdminsOpts = {
     schema: getAdminsSchema,
@@ -37,6 +38,7 @@ const adminRoute=(fastify,option,done)=>{
       fastify.get('/admin/get-review/:id',getReview)
       fastify.post('/admin/sign-in',(req,reply)=>adminlogin(fastify,req,reply))
       fastify.post('/admin/refresh-token',refreshtoken)
+      fastify.post('/admin/add-copon',AddCopon)
       fastify.post("/admin/token", (req, reply) =>
         tokenverify(fastify, req, reply)
       );
