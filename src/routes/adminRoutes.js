@@ -28,9 +28,9 @@ const adminRoute=(fastify,option,done)=>{
       fastify.post('/admin/add-category',addCartegory);
       fastify.post('/admin/add-product', productSchema,addProduct);
       fastify.post('/admin/get-order-products',getOrderProducts);
-      fastify.post('/admin/comment-product',commentProduct);
+      fastify.post('/admin/comment-product/:id',commentProduct);
       fastify.post('/admin/update-product/:id', productSchema,updateProduct);
-      fastify.delete('/admin/add-product/:id', deleteProduct);
+      fastify.delete('/admin/delete-product/:id', deleteProduct);
       fastify.get('/admin/get-products',getProducts);
       fastify.get('/admin/get-product/:id',getProduct);
       fastify.get('/admin/get-categorys',getCategorys);

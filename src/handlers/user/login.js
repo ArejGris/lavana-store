@@ -33,7 +33,7 @@ const loginhandler = async (fastify, req, reply) => {
           });
         } else {
           await prisma.session.create({
-            data: { userId: user.id, tokenDate: createdAt },
+            data: { customer:{connect:{id: user.id}}, tokenDate: createdAt },
           });
         }
         return reply.send({ user, token, status: 200 });

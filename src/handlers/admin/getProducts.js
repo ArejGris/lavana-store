@@ -8,6 +8,7 @@ const getProducts = async ( req, reply) => {
       
       reply.send({status:200,products:products})
     } catch (error) {
+      console.log(error,"error")
         reply.status(500).send({message:"internal server error"})
    
     }

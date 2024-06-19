@@ -1,12 +1,20 @@
 const { PrismaClient } = require("@prisma/client");
-
+const verifyToken = require("../../verifyToken");
+const jwt=require('jsonwebtoken')
 const prisma = new PrismaClient();
 const commentProduct = async ( req, reply) => {
   const { id } = req.params;
-  console.log(id,"hii")
-  const { productId,userId, comment } = req.body;
+  const { comment } = req.body;
+  const res=await verifyToken(req)
+  if(!res.token){
+    return reply.send(res);
+  }
+  const token=res.token
   try {
-    const product = await prisma.product.findUnique({ where:{id: productId} });
+    
+  const  user2 = jwt.decode(token, "secretkeyone");
+  const userId=user2.userId
+    const product = await prisma.product.findUnique({ where:{id:Number(id)} });
     const user = await prisma.user.findUnique({ where:{id: userId} });
    
 

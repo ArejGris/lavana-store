@@ -18,7 +18,7 @@ const addProduct = async (req, reply) => {
         description2:description2||null,
         keyWord,
         keyWord2:keyWord2||null,
-        images:images||[],
+        images:"",
       },
     });
     console.log(product);

@@ -10,16 +10,17 @@ const commentProduct = async ( req, reply) => {
         reply.send({status:404,message:"product not found"})
       }else{
       const thecomment=await prisma.comment.create({data:{
-        customer:"",
+        customer:"asmer",
         content:comment
       }})
       await prisma.commentUser.create({
-        data:{customer:null,
+        data:{
         comment:{connect:{id:thecomment.id}},
         product:{connect:{id:product.id}}}
       })}
       reply.send({status:200,message:"your comment added successfully"})
     } catch (error) {
+      console.log(error,"error")
         reply.status(500).send({message:"internal server error"})
    
     }

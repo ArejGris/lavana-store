@@ -18,6 +18,8 @@ model Session {
 id String @id @default(uuid())
 userId String @unique
 tokenDate DateTime?
+customer User @relation(fields: [userId], references: [id])
+
 }
 model Copon{
 id String @id @default(uuid())
@@ -46,14 +48,9 @@ updatedAt DateTime @updatedAt
 orders Order[]
 review Review[]
 comments CommentUser[]
-tokens Login[]
+tokens Session[]
 }
-model Login{
-id Int @id @default(autoincrement())
-userID String
-token String?
-customer User @relation(fields: [userID], references: [id])
-}
+
 model Admin {
 id String @id @default(uuid())
 email String? @unique
@@ -79,7 +76,7 @@ model Product {
   keyWord String?
   keyWord2 String?
   images String?
-  reviews  Review[]
+  reviews  Review[] 
   comments CommentUser[]
   Purchases OrderItem[]
 
@@ -87,19 +84,20 @@ model Product {
 
 model Review {
   id Int @id @default(autoincrement())
-  productID Int
+  val Int?
+  productId Int
   userID String
-  product Product @relation(fields: [productID], references: [id])
-  custoumer User @relation(fields: [userID], references: [id])
-  careatedAt DateTime @default(now())
+  product Product @relation(fields: [productId], references: [id],onDelete:Cascade) 
+  customer User @relation(fields: [userID], references: [id])
+  createdAt DateTime @default(now())
 }
 
 // for break relation between product & Category
 model ProductCategory {
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id],onDelete:Cascade)
   categoryId Int
   productId Int
-  category Category @relation(fields: [categoryId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id],onDelete:Cascade)
 
   @@id([productId, categoryId])
 }
@@ -111,14 +109,14 @@ model Comment{
   content String
 }
 model CommentUser{
-  customerId String
+  customerId String?
   commentId Int
   productId Int
-  comment Comment @relation(fields: [commentId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
-  customer User @relation(fields: [customerId], references: [id])
+  comment Comment @relation(fields: [commentId], references: [id],onDelete:Cascade)
+  product Product @relation(fields: [productId], references: [id],onDelete:Cascade)
+  customer User? @relation(fields: [customerId], references: [id])
 
-  @@id([commentId, productId, customerId])
+  @@id([commentId, productId])
 }
 model Order {
   id String @id @default(uuid())
@@ -127,6 +125,7 @@ model Order {
   orderItems OrderItem[]
   shipment Shipment[]
   orderDate DateTime @default(now())
+
 }
 
 model OrderItem{
@@ -134,14 +133,14 @@ model OrderItem{
   productId Int
   price Int
   quentity Int
-  order Order @relation(fields: [orderId], references: [id])
+  order Order @relation(fields: [orderId], references: [id],onDelete:Cascade)
   product Product @relation(fields: [productId], references: [id])
   @@id([orderId, productId])
 }
 
 model Shipment {
   id String @id @default(uuid())
-  order Order @relation(fields: [orderID], references: [id])
+  order Order @relation(fields: [orderID], references: [id],onDelete:Cascade)
   orderID String @unique
   shipmentDate DateTime @default(now())
 }

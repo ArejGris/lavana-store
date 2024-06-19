@@ -4,7 +4,7 @@ const { generateAdminToken} = require("../../auth2");
 const adminlogin = async(fastify,req,reply) => {
     const { email} = req.body;
     console.log(email)
-    try {  /* 
+    try {  /*  
         const admin2=await prisma.admin.create({data:{email,role:"admin"}})
         console.log(admin2)  */
         const admin= await prisma.admin.findUnique({where:{email:email}})

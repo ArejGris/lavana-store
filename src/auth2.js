@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 // Function to generate an access token
- function generateAccessToken(userId, expiresIn = '15s') {
+ function generateAccessToken(userId, expiresIn = '10s') {
   return jwt.sign({ userId },"secretkeyone", { expiresIn });
 }
 

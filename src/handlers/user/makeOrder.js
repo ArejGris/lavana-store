@@ -2,70 +2,16 @@ const { PrismaClient } = require("@prisma/client");
 const shipment = require("../../stripe");
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
+const verifyToken=require('../../verifyToken')
 const makeOrder = async (req, reply) => {
   const { orderItems } = req.body;
 
-  const authHeader = req.headers["authorization"];
-  const token = authHeader.split(" ")[1]; // Bearer TOKEN
-  console.log(token, "token");
-  if (!token) return reply.send({ status: 400, message: "bad request" }); // If no token, return Unauthorized status
-  let user2;
-  try {
-    user2 = jwt.verify(token, "secretkeyone");
-    console.log(user2, "user token");
-    const createdAt = new Date(user2.iat * 1000);
-    const user = await prisma.user.findUnique({ where: { id: user2.userId } });
-    if (user.tokenDate.toISOString() !== createdAt.toISOString()) {
-      console.log("hello world");
-      const session = await prisma.session.findUnique({
-        where: { userId: user2.userId },
-      });
-      console.log(session.tokenDate, "tokenDate");
-      console.log(createdAt, "created at");
-      if (
-        !session ||
-        session.tokenDate.toISOString() !== createdAt.toISOString()
-      ) {
-        return reply.send({
-          status: 400,
-          message: "date of token not verified",
-        });
-      }
-    }
-  } catch (err) {
-    if (err && err.message == "jwt expired") {
-      //check date of token create
-
-      user2 = jwt.decode(token, "secretkeyone");
-      console.log(user2, "user token");
-      const createdAt = new Date(user2.iat * 1000);
-      console.log(createdAt, "createedAt");
-      const user = await prisma.user.findUnique({
-        where: { id: user2.userId },
-      });
-      console.log(user.tokenDate, "token date");
-      if (user.tokenDate.toISOString() !== createdAt.toISOString()) {
-        console.log("the token isn'nt compitable with the date stored in db")
-        const session = await prisma.session.findUnique({
-          where: { userId: user2.userId },
-        });
-        if (session.tokenDate.toISOString() !== createdAt.toISOString()) {
-          console.log("hello");
-          return reply.send({
-            status: 400,
-            message: "date of token not verified",
-          });
-        }else{
-          console.log("the token compitable with the date stored in db")
-        }
-      }
-      return reply.send({ status: 300, message: "send refresh token" });
-    }
-    if (err) {
-      return reply.send({ status: 403, message: "fail to verify token" });
-    }
-  }
-
+  const res=await verifyToken(req)
+if(!res.token){
+  return reply.send(res);
+}
+const token=res.token
+const  user2 = jwt.decode(token, "secretkeyone");
   let compareprice = true;
   orderItems.forEach(async (item) => {
     const product = await prisma.product.findUnique({
@@ -121,6 +67,26 @@ const makeOrder = async (req, reply) => {
       await prisma.shipment.create({
         data: { orderID: order.id, shipmentDate: new Date() },
       });
+      try {
+        const res = await fetch(
+          "https://local-stg.epservices.ae/api/Shipments/create",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key":"23ba3fccc642a478c192e823f7c3d413:a51a45a8abf84994a19a1dfb0f044c4e",
+              'Password': "C175120",
+            },
+            body: JSON.stringify(order),
+            mode: "cors",
+          }
+        );
+        const data=await res.json()
+        console.log(data,"data")
+      } catch (error) {
+        console.log(error)
+      }
+ 
       reply
         .status(200)
         .send({ message: "successfully registered the order", order });

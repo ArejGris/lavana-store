@@ -34,7 +34,7 @@ const userRoute = (fastify, option, done) => {
   fastify.post('/user/token',(req,reply)=>tokenreq(fastify,req,reply));
   fastify.post('/user/refresh-token',refreshtoken);
   fastify.post('/hooks',stripeNot)
-  fastify.post('/user/view-product',reviewProduct);
+  fastify.post('/user/review-product/:id',reviewProduct);
   fastify.put('/user/confirm',confirmUser);
   fastify.post('/user/comment-product/:id',commentProduct);
   fastify.get('/user/get-comments/:id',getComment);

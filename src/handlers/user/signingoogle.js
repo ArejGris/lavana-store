@@ -37,7 +37,7 @@ if(session){
   }else{
     
   await prisma.session.create({
-    data:{userId:myuser.id, tokenDate: createdAt }
+    data:{customer:{connect:{id:myuser.id}}, tokenDate: createdAt }
    })
   }
  if(!myuser){

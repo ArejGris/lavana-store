@@ -61,7 +61,7 @@ const signhandler = async (fastify, req, reply) => {
        where: { id: myuser.id },
        data: { tokenDate: date },
      });
-     await prisma.session.create({data:{userId:myuser.id,
+     await prisma.session.create({data:{customer:{connect:{id:myuser.id}},
       tokenDate:date
      }})
         reply.send({ user: myuser,token, status: 200 });
