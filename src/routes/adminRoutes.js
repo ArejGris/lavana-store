@@ -1,5 +1,5 @@
 const getAdminsSchema=require("../schemas/admin");
-const getAdminHandler=require("../handlers/admin/admin")
+//const getAdminHandler=require("../handlers/admin/admin")
 const addCartegory=require("../handlers/admin/addCatigory")
 const addProduct =require("../handlers/admin/addProduct")
 const updateProduct=require("../handlers/admin/updateProduct")
@@ -18,13 +18,9 @@ const tokenverify = require("../handlers/admin/token");
 const refreshtoken = require("../handlers/admin/refreshToken");
 const AddCopon = require("../handlers/admin/addCopon");
 
-const getAdminsOpts = {
-    schema: getAdminsSchema,
-    handler: getAdminHandler,
-  };
 const adminRoute=(fastify,option,done)=>{
    
-      fastify.post('/admin', getAdminsOpts.schema,getAdminsOpts.handler);
+      //fastify.post('/admin', getAdminsOpts.schema,getAdminsOpts.handler);
       fastify.post('/admin/add-category',addCartegory);
       fastify.post('/admin/add-product', productSchema,addProduct);
       fastify.post('/admin/get-order-products',getOrderProducts);

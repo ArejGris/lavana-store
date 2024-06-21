@@ -22,10 +22,10 @@ const admin=await prisma.admin.findUnique({where:{id:user2.userId}})
       const refreshToken = generateRefreshToken(admin.id);
       console.log(refreshToken, "compare two token");
       
-      reply.send({ status: 200,token: refreshToken });
+     return reply.send({ status: 200,admin,token: refreshToken });
       
     } else {
-       reply.send({ status: 404, message: "user not found" });
+      return reply.send({ status: 404, message: "user not found" });
     }
   
 

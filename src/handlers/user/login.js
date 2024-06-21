@@ -23,19 +23,11 @@ const loginhandler = async (fastify, req, reply) => {
         data: { tokenDate: createdAt },
       });
       try {
-        const session = await prisma.session.findUnique({
-          where: { userId: user.id },
-        });
-        if (session) {
-          await prisma.session.update({
-            where: { userId: user.id },
-            data: { tokenDate: createdAt },
-          });
-        } else {
+    
           await prisma.session.create({
             data: { customer:{connect:{id: user.id}}, tokenDate: createdAt },
           });
-        }
+        
         return reply.send({ user, token, status: 200 });
       } catch (error) {
         console.log(error);

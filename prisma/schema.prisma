@@ -16,7 +16,7 @@ url="mysql://root:1234@localhost:3306/lavana3"
 }
 model Session {
 id String @id @default(uuid())
-userId String @unique
+userId String 
 tokenDate DateTime?
 customer User @relation(fields: [userId], references: [id])
 
@@ -55,10 +55,18 @@ model Admin {
 id String @id @default(uuid())
 email String? @unique
 role String 
+tokenDate DateTime?
+sessions AdminSession[]
 createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 }
+model AdminSession {
+id String @id @default(uuid())
+adminId String
+tokenDate DateTime?
+admin Admin @relation(fields: [adminId], references: [id])
 
+}
 model Category {
   id Int @id @default(autoincrement())
   title String 

@@ -30,14 +30,15 @@ const user=await prisma.user.findUnique({where:{id:user2.userId}})
         where: { id: user.id },
         data: { tokenDate: date },
       });
-      await prisma.session.update({where:{userId:user.id},data:{
+      await prisma.session.create({data:{
+        customer:{connect:{id:user.id}},
         tokenDate:date
        }})
       console.log(refreshToken, token, user, "all data");
-      reply.send({ status: 200, token: newtoken, refreshToken });
+      return reply.send({ status: 200, token: newtoken, refreshToken });
       
     } else {
-       reply.send({ status: 404, message: "user not found" });
+      return reply.send({ status: 404, message: "user not found" });
     }
   
 

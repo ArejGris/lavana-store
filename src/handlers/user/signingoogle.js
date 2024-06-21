@@ -20,6 +20,9 @@ const signingoogle = async (fastify,req, reply) => {
   const decode = jwt.decode(token);
   const date = new Date(decode.iat * 1000);
   await prisma.user.update({where:{id:user.id},data:{tokenDate:date}})
+  await prisma.session.create({
+    data:{customer:{connect:{id:user.id}}, tokenDate: date}
+   })
     reply.send({ status:200,user,token,message: "already found the email" });
     return;
   }
@@ -29,29 +32,23 @@ const signingoogle = async (fastify,req, reply) => {
       email,firstName,lastName
     },
   });
-const session= await prisma.session.findUnique({where:{userId:myuser.id}})
-if(session){
-  await prisma.session.update({
-    where:{userId:myuser.id},data:{ tokenDate: createdAt }
-   })
-  }else{
-    
+
+  const token=generateAccessToken(myuser.id)
+  const decode = jwt.decode(token);
+  const date = new Date(decode.iat * 1000);
   await prisma.session.create({
-    data:{customer:{connect:{id:myuser.id}}, tokenDate: createdAt }
+    data:{customer:{connect:{id:myuser.id}}, tokenDate: date }
    })
-  }
+  
  if(!myuser){
   reply.send({status:500,message:"user havent created"})
   return;
  }
   console.log(myuser);
-  const token=await fastify.jwt.sign({userId:myuser.id})
-  await prisma.user.update({where:{id:myuser.id},data:{lastSignin:new Date()}})
-  const refreshToken=randtoken.uid(190)
-  reply.send({user:myuser,refreshToken,token,status:200});
+ return reply.send({user:myuser,token,status:200});
  } catch (error) {
   console.log(error)
-  reply.send({status:500,message:"internal server error"})
+  return reply.send({status:500,message:"internal server error"})
  }
 
 };
