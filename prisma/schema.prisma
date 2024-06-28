@@ -9,10 +9,10 @@ generator client {
 }
 
 datasource db {
-//provider = "postgresql"
-//url      = "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
-provider="mysql"
-url="mysql://root:1234@localhost:3306/lavana3"
+provider = "postgresql"
+url      = "postgres://postgres.mwaixiesxtmnpowbnhdu:Lavana1234gris@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+//provider="mysql"
+//url="mysql://root:1234@localhost:3306/lavana3"
 }
 model Session {
 id String @id @default(uuid())

@@ -83,7 +83,10 @@ fastify1.get('/users',async(req,reply)=>{
  */
 
 try {
-    fastify1.listen({port:5000})
+    fastify1.listen(3000,'0.0.0.0',err=>{
+        if(err)
+            throw err;
+    })
 } catch (error) {
     fastify1.log.error(error)
     process.exit(1)
