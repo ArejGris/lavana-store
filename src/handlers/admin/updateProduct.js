@@ -7,11 +7,13 @@ const updateProduct = async ( req, reply) => {
     categories,
     price,
     size,
-    descrition,
+    description,
+    description2,
     keyWord,
+    keyWord2,
     images
   } = req.body;
-  if (!categories && !price && !size && !descrition&&!keyWord && !images){
+  if (!categories && !price && !size && !description&&!keyWord && !images){
 reply.send({message:"no data for update"})
     }
 
@@ -26,10 +28,10 @@ reply.send({message:"no data for update"})
         data: {
             price:Number(price),
             size:size,
-            descrition:descrition,
-            description2:"",
+            description:description,
+            description2:description2,
             keyWord:keyWord,
-            keyWord2:"",
+            keyWord2:keyWord2,
             images},
       });
       categories.forEach(async(cat)=> {
@@ -39,10 +41,10 @@ reply.send({message:"no data for update"})
        );
       reply
         .status(200)
-        .send({ message: "succesfully update the product", updatedproduct });
+        .send({status:200, message: "succesfully update the product", updatedproduct });
     } catch (error) {
       console.log(error)
-      reply.status(500).send({ message: "internal server error" });
+      reply.status(500).send({status:500, message: "internal server error" });
     }
 };
 module.exports = updateProduct;

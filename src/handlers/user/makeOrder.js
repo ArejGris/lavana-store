@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const verifyToken=require('../../verifyToken')
 const makeOrder = async (req, reply) => {
-  const { orderItems } = req.body;
+  const { orderItems ,copon} = req.body;
 
   const res=await verifyToken(req)
 if(!res.token){
@@ -54,7 +54,9 @@ const  user2 = jwt.decode(token, "secretkeyone");
           orderDate: new Date(),
         },
       });
+      let totalprice=0
       orderItems.forEach(async (item) => {
+        totalprice+=item.quentity* Number(item.price)
         await prisma.orderItem.create({
           data: {
             price: Number(item.price),
@@ -64,32 +66,13 @@ const  user2 = jwt.decode(token, "secretkeyone");
           },
         });
       });
-      await prisma.shipment.create({
-        data: { orderID: order.id, shipmentDate: new Date() },
-      });
-      try {
-        const res = await fetch(
-          "https://local-stg.epservices.ae/api/Shipments/create",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-api-key":"23ba3fccc642a478c192e823f7c3d413:a51a45a8abf84994a19a1dfb0f044c4e",
-              'Password': "C175120",
-            },
-            body: JSON.stringify(order),
-            mode: "cors",
-          }
-        );
-        const data=await res.json()
-        console.log(data,"data")
-      } catch (error) {
-        console.log(error)
+      if(copon){
+      const registeredcopon=  await prisma.copon.findUnique({where:{code:copon}})
+        if(registeredcopon){
+         totalprice-= totalprice*Number(registeredcopon.discount/100)
+        }
       }
- 
-      reply
-        .status(200)
-        .send({ message: "successfully registered the order", order });
+      return reply.send({status:200,message:"enter info for shipment"})
     } catch (error) {
       console.log(error);
       reply.status(500).send({ message: "internal server error" });

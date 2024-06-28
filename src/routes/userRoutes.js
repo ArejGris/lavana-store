@@ -13,6 +13,7 @@ const tokenreq = require("../handlers/user/token");
 const refreshtoken = require("../handlers/user/refreshtoken");
 const getUserOrder = require("../handlers/user/getUserOrders");
 const deleteOrder = require("../handlers/user/deleteOrder");
+const sendShipment = require("../handlers/user/sendShipment");
 const userRoute = (fastify, option, done) => {
   fastify.post(
     "/user/sign",
@@ -31,6 +32,7 @@ const userRoute = (fastify, option, done) => {
   );
  
   fastify.post('/user/make-order',makeOrder);
+  fastify.post('/user/shipment-data',sendShipment);
   fastify.post('/user/token',(req,reply)=>tokenreq(fastify,req,reply));
   fastify.post('/user/refresh-token',refreshtoken);
   fastify.post('/hooks',stripeNot)

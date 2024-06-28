@@ -5,6 +5,7 @@ const getCategory = async (req, reply) => {
   const { id } = req.params;
   console.log(id);
   try {
+    const cat =await prisma.category.findUnique({where:{id:Number(id)}})
     const products1 = await prisma.productCategory.findMany({
       where: { categoryId: Number(id) },
       select: { productId: true },
@@ -17,7 +18,7 @@ const getCategory = async (req, reply) => {
         },
       },
     });
-    reply.send({ status: 200, products });
+    reply.send({ status: 200, products,cat });
   } catch (error) {
     console.log(error);
     reply.status(500).send({ message: "internal server error" });

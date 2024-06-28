@@ -7,10 +7,10 @@ const addCategory = async ( req, reply) => {
     try {
       
  const cat= await prisma.category.create({data:{title,title2}})
- reply.status(200).send({message:"successfully added the category",cat})
+ reply.status(200).send({status:200,message:"successfully added the category",cat})
     } catch (error) {
       console.log(error)
- reply.status(500).send({message:"interal server error"})
+ reply.status(500).send({status:500,message:"interal server error"})
     }
   };
   module.exports =  addCategory ;

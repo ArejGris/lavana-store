@@ -12,13 +12,13 @@ const addProduct = async (req, reply) => {
   try {
     const product = await prisma.product.create({
       data: {
-        price,
+        price:Number(price),
         size,
         description,
         description2:description2||null,
         keyWord,
         keyWord2:keyWord2||null,
-        images:"",
+        images,
       },
     });
     console.log(product);

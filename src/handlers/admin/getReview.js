@@ -13,14 +13,18 @@ const productreview=await prisma.review.count({where:{productId:Number(id)}})
 const promises=array.map(async(val)=>{
   
   const reviews=await prisma.review.count({where:{productId:Number(id),val}})
-  console.log(val,reviews)
+  
   return {
    val,reviews
   }
 }) 
 const allreviews=await Promise.all(promises)
-
-      reply.status(200).send({stars:allreviews,review:productreview})
+let max=0
+if(productreview>0){
+ const top=allreviews.reduce((prev,current)=>((prev.reviews>current.reviews)?prev:current),allreviews[0])
+ max=top.val
+}
+      reply.status(200).send({max:max,stars:allreviews,review:productreview})
     } catch (error) {
       console.log(error,"error")
         reply.status(500).send({message:"internal server error"})
