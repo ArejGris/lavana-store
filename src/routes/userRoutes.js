@@ -4,7 +4,6 @@ const commentProduct = require("../handlers/user/commentProduct");
 const makeOrder=require("../handlers/user/makeOrder");
 const { loginSchema } = require("../schemas/loginSchema");
 const { signSchema } = require("../schemas/signSchema");
-const stripeNot = require("../handlers/user/stripeNot");
 const confirmUser = require("../handlers/user/confirmUser");
 const signingoogle = require("../handlers/user/signingoogle");
 const reviewProduct = require("../handlers/user/reviewProduct");
@@ -35,7 +34,6 @@ const userRoute = (fastify, option, done) => {
   fastify.post('/user/shipment-data',sendShipment);
   fastify.post('/user/token',(req,reply)=>tokenreq(fastify,req,reply));
   fastify.post('/user/refresh-token',refreshtoken);
-  fastify.post('/hooks',stripeNot)
   fastify.post('/user/review-product/:id',reviewProduct);
   fastify.put('/user/confirm',confirmUser);
   fastify.post('/user/comment-product/:id',commentProduct);
