@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-const axios=require('axios')
+
 const prisma = new PrismaClient();
 const getProduct = async ( req, reply) => {
     const { id } = req.params;
