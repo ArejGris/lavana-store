@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const shipment = require("../../stripe");
 const prisma = new PrismaClient();
 const jwt = require("jsonwebtoken");
 const verifyToken=require('../../verifyToken')
